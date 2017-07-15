@@ -1,26 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 // We can `import` image as well
 import './HomeView.scss';
+import {actions} from '../modules/playback';
 
 import PlayButton from './PlayButton';
 
-const HomeView = ({playlist, albums}) => (
+const HomeView = ({current, playlist, albums, actions}) => (
   <div className="homeview">
     <div className="searchbox">
       <input className="form-control searchbox__query" placeholder="Search" />
     </div>
     
     <div className="playlist">
-      {playlist.map(({id, title}) => 
-      <div className="playlist__item" key={id}>
+      {playlist.map(({id, title, mediaLink}) => 
+      <div className={'playlist__item' + (current.id===id?' active':'')}
+           onClick={() => actions.play({id, title, mediaLink})}
+           key={id}>
         <h4 className="title">{title}</h4>
       </div>
       )}
     </div>
     
     <div className="central-stage">
-      <PlayButton style={{margin:'0 auto'}} />
+      <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
+      
       <div className="song-summary">
         <h3 className="title">Abraham's Praise</h3>
       </div>
@@ -57,15 +63,14 @@ const HomeView = ({playlist, albums}) => (
   </div>
 )
 
-const mapDispatchToProps = {
-  // increment : () => increment(1),
-  // doubleAsync
-}
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+});
 
 const mapStateToProps = (state) => {
-  const {playlist, albums} = state.playback;
+  const {current, playlist, albums} = state.playback;
   
-  return {playlist, albums};
+  return {current, playlist, albums};
 };
 
-export default connect(mapStateToProps)(HomeView);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeView);

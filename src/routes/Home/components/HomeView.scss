@@ -40,6 +40,9 @@
   color: $color;
   background-color: $bg-color;
   
+  &.active {
+    background-color: lighten($bg-color, 5%);
+  }
   &:hover {
     background-color: lighten($bg-color, 10%);
   }
