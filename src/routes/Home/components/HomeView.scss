@@ -1,0 +1,63 @@
+@import "~susy";
+
+.homeview {
+  width: span(4);
+  
+  &:before, &:after {
+    display: table;
+    content: "";
+    clear: both;
+  }
+}
+
+.searchbox {
+  width: span(4);
+  padding: 1em gutter()/2;
+}
+
+.playlist {
+  float: left;
+  width: span(1);  
+  padding: 0 gutter() / 2;
+  
+  border-right: 1px solid rgba(170, 170, 170, 0.5);
+}
+
+.playlist__item {
+  border-bottom: 1px solid rgba(170, 170, 170, 0.5);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .title {
+    padding: 0;
+    margin: 0.5em 0;
+  }
+}
+
+.central-stage {
+  float: left;
+  width: span(2);
+  padding: 0 gutter() / 2;
+}
+
+.lyricbox {
+  float: left;
+  width: span(1);
+  padding: 0 gutter() / 2;
+}
+
+.albums {
+  width: span(4);
+  float: left;
+  clear: both;
+  
+  border-top: 1px solid rgba(170, 170, 170, 0.5);
+}
+
+.albums__item {
+  float: left;
+  width: span(1);
+  padding: 1.5em gutter() / 2;
+}

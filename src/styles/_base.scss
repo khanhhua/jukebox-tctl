@@ -1,0 +1,39 @@
+/*
+Application Settings Go Here
+------------------------------------
+This file acts as a bundler for all variables/mixins/themes, so they
+can easily be swapped out without `core.scss` ever having to know.
+
+For example:
+
+@import './variables/colors';
+@import './variables/components';
+@import './themes/default';
+*/
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/type";
+
+@import "~susy";
+
+$susy: (
+  'columns': susy-repeat(4),
+  'gutters': 0.25,
+  'spread': 'narrow',
+  'container': '1200px',
+  'container-spread': 'narrow',
+);
+
+$of-columns: of 6;
+
+.container {
+  width: span(4);
+  margin: 0 auto;
+  
+  &:before, &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

@@ -1,0 +1,16 @@
+@import '~susy';
+
+.page-layout__viewport {
+  width: span(4);
+
+  &:before, &:after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}
+
+.page-layout__nav-item--active {
+  font-weight: bold;
+  text-decoration: underline;
+}

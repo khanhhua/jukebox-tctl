@@ -1,0 +1,5 @@
+@mixin interactive {
+  transition: background-color 300ms ease-out;
+  
+  cursor: pointer;
+}
