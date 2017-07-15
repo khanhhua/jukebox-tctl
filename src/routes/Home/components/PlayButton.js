@@ -20,13 +20,22 @@ function onClick({selectFirstSong, play, pause}, song) {
 }
 
 const PlayButton = ({style, song, actions}) => (
-  <div className="play-button" style={style} onClick={onClick.bind(this, actions, song)}>
-    {(song && song.status !== 'PLAYING') &&
-    <span>PLAY</span>
+  <div>
+    <div className="play-button" style={style} onClick={onClick.bind(this, actions, song)}>
+      {(song && song.status !== 'PLAYING') &&
+      <span>PLAY</span>
+      }
+      {(song && song.status === 'PLAYING') &&
+      <span>PAUSE</span>
+      }
+    </div>
+    {(song.status !== PLAYBACK_STATUS_UNLOADED) &&
+    <div className="song-summary">
+      <h3>{song.title}</h3>
+      
+    </div>
     }
-    {(song && song.status === 'PLAYING') &&
-    <span>PAUSE</span>
-    }
+    
   </div>
 );
 

@@ -11,6 +11,7 @@ const ACTION_LOAD_ALBUMS = 'ACTION_LOAD_ALBUMS';
 
 const ACTION_SELECT_SONG = 'ACTION_SELECT_SONG';
 
+const ACTION_REQUEST_PLAY_SONG = 'ACTION_REQUEST_PLAY_SONG';
 const ACTION_PLAY_SONG = 'ACTION_PLAY_SONG';
 const ACTION_REQUEST_PAUSE_SONG = 'ACTION_REQUEST_PAUSE_SONG';
 const ACTION_PAUSE_SONG = 'ACTION_PAUSE_SONG';
@@ -19,6 +20,40 @@ const ACTION_PAUSE_SONG = 'ACTION_PAUSE_SONG';
 // Actions
 // ------------------------------------
 
+function ensureAudioElement (dispatch, song) {
+  let audioElement;
+  if (window.audioPlayer) {
+    audioElement = window.audioPlayer;
+    
+    if (audioElement.paused) {
+      audioElement.play();
+    } else {
+      audioElement.setAttribute('autoplay', true);
+      audioElement.setAttribute('src', song.mediaLink);
+    }
+  } else {
+    audioElement = document.createElement('AUDIO');
+    audioElement.setAttribute('autoplay', true);
+    audioElement.setAttribute('src', song.mediaLink);
+    
+    window.document.body.appendChild(audioElement);
+    window.audioPlayer = audioElement;
+  }
+  
+  audioElement.onplaying = function () {
+    dispatch({
+      type: ACTION_PLAY_SONG,
+      payload: song
+    });
+  };
+  
+  audioElement.onpause = function () {
+    dispatch({
+      type: ACTION_PAUSE_SONG,
+      payload: song
+    });
+  };
+}
 
 export const actions = {
   selectFirstSong: () => (dispatch, getState) => {
@@ -30,69 +65,16 @@ export const actions = {
     setTimeout(() => {
       let {playback: {current: song}} = getState();
       
-      let audioElement;
-      if (window.audioPlayer) {
-        audioElement = window.audioPlayer;
-        
-        if (audioElement.paused) {
-          audioElement.play();
-        } else {
-          audioElement.setAttribute('autoplay', true);
-          audioElement.setAttribute('src', song.mediaLink);
-        }
-      } else {
-        audioElement = document.createElement('AUDIO');
-        audioElement.setAttribute('autoplay', true);
-        audioElement.setAttribute('src', song.mediaLink);
-        
-        window.document.body.appendChild(audioElement);
-        window.audioPlayer = audioElement;
-      }
-      
-      audioElement.onplaying = function () {
-        dispatch({
-          type: ACTION_PLAY_SONG,
-          payload: song
-        });
-      };
-      
-      audioElement.onpause = function () {
-        dispatch({
-          type: ACTION_PAUSE_SONG,
-          payload: song
-        });
-      };
+      ensureAudioElement(dispatch, song);
     }, 300);
   },
   play: (song) => (dispatch) => {
-    let audioElement;
-    if (window.audioPlayer) {
-      audioElement = window.audioPlayer;
-      
-      if (audioElement.paused) {
-        audioElement.play();
-      } else {
-        audioElement.setAttribute('autoplay', true);
-        audioElement.setAttribute('src', song.mediaLink);
-      }
-      
-      audioElement.setAttribute('autoplay', true);
-      audioElement.setAttribute('src', song.mediaLink);
-    } else {
-      audioElement = document.createElement('AUDIO');
-      audioElement.setAttribute('autoplay', true);
-      audioElement.setAttribute('src', song.mediaLink);
-      
-      window.document.body.appendChild(audioElement);
-      window.audioPlayer = audioElement;
-    }
-    
-    audioElement.onplaying = function () {
-      dispatch({
-        type: ACTION_PLAY_SONG,
-        payload: song
-      });
-    };
+    dispatch({
+      type: ACTION_REQUEST_PLAY_SONG,
+      payload: song
+    });
+
+    ensureAudioElement(dispatch, song);
   },
   pause: () => {
     if (window.audioPlayer) {
@@ -180,6 +162,8 @@ export default function playbackReducer (state = initialState, action) {
         current: Object.assign({}, playlist[0], {status: PLAYBACK_STATUS_PAUSED})
       });
       return newState;
+
+    case ACTION_REQUEST_PLAY_SONG:
     case ACTION_PLAY_SONG:
       newState = Object.assign({}, state, {
         current: Object.assign({}, action.payload, {status: PLAYBACK_STATUS_PLAYING})

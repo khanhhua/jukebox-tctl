@@ -76,10 +76,14 @@
 .albums {
   $color: #1695A3;
   
-  width: span(4);
-  float: left;
-  clear: both;
+  @include clearfix;
   
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: span(4);
+  
+  float: left;
   background: $color;
 }
 
@@ -98,5 +102,9 @@
 
   &:hover {
     background: lighten($bg-color, 10%);
+  }
+  
+  &:nth-child(4n + 1) {
+    clear: left;
   }
 }

@@ -26,10 +26,6 @@ const HomeView = ({current, playlist, albums, actions}) => (
     
     <div className="central-stage">
       <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
-      
-      <div className="song-summary">
-        <h3 className="title">Abraham's Praise</h3>
-      </div>
     </div>
     
     <div className="lyricbox">
