@@ -1,8 +1,7 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-const CLOUDANT_KEY = 'rpaistationtrostasceltys';
-const CLOUDANT_PASSWORD = '63a1536f35ee47f0ecace0b3c8261ff486e5a774';
+import * as db from 'lib/db';
 
 export const PLAYBACK_STATUS_UNLOADED = 'UNLOADED';
 export const PLAYBACK_STATUS_LOADED = 'LOADED';
@@ -62,43 +61,6 @@ function ensureAudioElement (dispatch, song) {
   };
 }
 
-function dbGET (url, transformer=null) {
-  return fetch(url, {
-    headers: {
-      'Authorization': `Basic ${btoa(CLOUDANT_KEY + ':' + CLOUDANT_PASSWORD)}`
-    }
-  }).then(res => {
-    return res.json();
-  }).then(({rows}) => {
-    if (transformer) {
-      return transformer(rows);
-    }
-    
-    return rows;
-  });
-}
-
-function dbGetAlbums () {
-  const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
-  
-  return dbGET(url, (data) => data.map(item => (item.value.id=item.value._id, item.value) ));
-}
-
-function dbGetSongsByIds (ids=[]) {
-  const urls = ids.map(id => `https://fatmandesigner-blog.cloudant.com/hymnals/${id}`);
-  
-  return Promise.all(urls.map(url => 
-    fetch(url, 
-      {
-        headers: {
-          'Authorization': `Basic ${btoa(CLOUDANT_KEY + ':' + CLOUDANT_PASSWORD)}`
-        }
-      }).then(res => {
-        return res.json().then(item => (item.id = item._id, item));
-      })))
-}
-
-
 export const actions = {
   loadAlbums: () => (dispatch, getState) => {
     dispatch({
@@ -107,7 +69,7 @@ export const actions = {
     });
     
     const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
-    dbGetAlbums().then(data => {
+    db.getAlbums().then(data => {
       dispatch({
         type: ACTION_LOAD_ALBUMS,
         status: STATUS_SUCCESS,
@@ -123,7 +85,7 @@ export const actions = {
         return;
       }
 
-      dbGetSongsByIds(defaultAlbum.songs).then(songs => {
+      db.getSongsByIds(defaultAlbum.songs).then(songs => {
         dispatch({
           type: ACTION_LOAD_PLAYLIST,
           status: STATUS_SUCCESS,
