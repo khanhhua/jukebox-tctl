@@ -1,6 +1,9 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
+const CLOUDANT_KEY = 'rpaistationtrostasceltys';
+const CLOUDANT_PASSWORD = '63a1536f35ee47f0ecace0b3c8261ff486e5a774';
+
 export const PLAYBACK_STATUS_UNLOADED = 'UNLOADED';
 export const PLAYBACK_STATUS_LOADED = 'LOADED';
 export const PLAYBACK_STATUS_PLAYING = 'PLAYING';
@@ -15,6 +18,10 @@ const ACTION_REQUEST_PLAY_SONG = 'ACTION_REQUEST_PLAY_SONG';
 const ACTION_PLAY_SONG = 'ACTION_PLAY_SONG';
 const ACTION_REQUEST_PAUSE_SONG = 'ACTION_REQUEST_PAUSE_SONG';
 const ACTION_PAUSE_SONG = 'ACTION_PAUSE_SONG';
+
+const STATUS_PENDING = 'PENDING';
+const STATUS_SUCCESS = 'SUCCESS';
+const STATUS_ERROR = 'ERROR';
 
 // ------------------------------------
 // Actions
@@ -55,7 +62,77 @@ function ensureAudioElement (dispatch, song) {
   };
 }
 
+function dbGET (url, transformer=null) {
+  return fetch(url, {
+    headers: {
+      'Authorization': `Basic ${btoa(CLOUDANT_KEY + ':' + CLOUDANT_PASSWORD)}`
+    }
+  }).then(res => {
+    return res.json();
+  }).then(({rows}) => {
+    if (transformer) {
+      return transformer(rows);
+    }
+    
+    return rows;
+  });
+}
+
+function dbGetAlbums () {
+  const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
+  
+  return dbGET(url, (data) => data.map(item => (item.value.id=item.value._id, item.value) ));
+}
+
+function dbGetSongsByIds (ids=[]) {
+  const urls = ids.map(id => `https://fatmandesigner-blog.cloudant.com/hymnals/${id}`);
+  
+  return Promise.all(urls.map(url => 
+    fetch(url, 
+      {
+        headers: {
+          'Authorization': `Basic ${btoa(CLOUDANT_KEY + ':' + CLOUDANT_PASSWORD)}`
+        }
+      }).then(res => {
+        return res.json().then(item => (item.id = item._id, item));
+      })))
+}
+
+
 export const actions = {
+  loadAlbums: () => (dispatch, getState) => {
+    dispatch({
+      type: ACTION_LOAD_PLAYLIST,
+      status: STATUS_PENDING
+    });
+    
+    const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
+    dbGetAlbums().then(data => {
+      dispatch({
+        type: ACTION_LOAD_ALBUMS,
+        status: STATUS_SUCCESS,
+        payload: data
+      });
+      
+      if (!(data.length)) {
+        return;
+      }
+
+      const defaultAlbum = data.find(item => item.id === 'album-tvchh');
+      if (!(defaultAlbum && defaultAlbum.songs && defaultAlbum.songs.length)) {
+        return;
+      }
+
+      dbGetSongsByIds(defaultAlbum.songs).then(songs => {
+        dispatch({
+          type: ACTION_LOAD_PLAYLIST,
+          status: STATUS_SUCCESS,
+          payload: songs
+        });
+      });
+    })
+  },
+  
   selectFirstSong: () => (dispatch, getState) => {
     dispatch({
       type: ACTION_SELECT_SONG,
@@ -91,71 +168,36 @@ const initialState = {
   current: {
     status: 'UNLOADED'
   },
-  playlist: [
-    {
-      id: 'S01',
-      title: 'Hoi Thanh Vuong, Kip Ngu Lai',
-      mediaLink: 'http://www.thanhcatinlanh.com/media/thanhca/02001/mp3s/02001-s.mp3'
-    },
-    {
-      id: 'S02',
-      title: 'Nguyen Tung My Chua Linh Nang',
-      mediaLink: 'http://www.thanhcatinlanh.com/media/tcvn/002/002-s1.mp3'
-    },
-    {
-      id: 'S03',
-      title: 'Ngoi Giehova Thanh De',
-      mediaLink: 'http://www.thanhcatinlanh.com/media/tcvn/003/003-c1.mp3'
-    }
-  ],
-  albums: [
-    {
-      id: 'A01',
-      title: 'Traditional Hymns'
-    },
-    {
-      id: 'A02',
-      title: 'Praise and Worship'
-    },
-    {
-      id: 'A03',
-      title: 'Tôn Vinh Chúa Hằng Hữu'
-    },
-    {
-      id: 'A04',
-      title: 'Traditional Hymns'
-    },
-    {
-      id: 'A05',
-      title: 'Praise and Worship'
-    },
-    {
-      id: 'A06',
-      title: 'Tôn Vinh Chúa Hằng Hữu'
-    },
-    {
-      id: 'A07',
-      title: 'Praise and Worship'
-    },
-    {
-      id: 'A08',
-      title: 'Praise and Worship'
-    },
-    {
-      id: 'A09',
-      title: 'Tôn Vinh Chúa Hằng Hữu'
-    },
-    {
-      id: 'A10',
-      title: 'Praise and Worship'
-    },
-  ]
+  playlist: [],
+  albums: []
 };
 
 export default function playbackReducer (state = initialState, action) {
   let newState;
   
   switch (action.type) {
+    case '@@redux/init':
+      return state;
+    case ACTION_LOAD_ALBUMS:
+      if (action.status !== STATUS_SUCCESS) {
+        return state;
+      }
+
+      newState = Object.assign({}, state, {
+        albums: action.payload
+      });
+      return newState;
+      
+    case ACTION_LOAD_PLAYLIST:
+      if (action.status !== STATUS_SUCCESS) {
+        return state;
+      }
+
+      newState = Object.assign({}, state, {
+        playlist: action.payload
+      });
+      return newState;
+      
     case ACTION_SELECT_SONG:
       const {playlist} = state;
       newState = Object.assign({}, state, {

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import createStore from './store/createStore'
 import './styles/main.scss'
 
+import {actions} from 'routes/Home/modules/playback';
+
 // Store Initialization
 // ------------------------------------
 const store = createStore(window.__INITIAL_STATE__)
@@ -18,7 +20,9 @@ let render = () => {
   ReactDOM.render(
     <App store={store} routes={routes} />,
     MOUNT_NODE
-  )
+  );
+  
+  store.dispatch(actions.loadAlbums());
 }
 
 // Development Tools

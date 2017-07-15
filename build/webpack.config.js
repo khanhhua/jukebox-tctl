@@ -18,6 +18,7 @@ const config = {
     ],
     main: [
       inProjectSrc(project.main),
+      'whatwg-fetch'
     ],
   },
   devtool: project.sourcemaps ? 'source-map' : false,
