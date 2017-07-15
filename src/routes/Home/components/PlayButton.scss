@@ -1,9 +1,13 @@
 @import "../../../styles/mixins";
 
+$color: #EB7F00;
+
 .play-button {
   @include interactive;
   
-  background-color: #ccc;
+  background-color: $color;
+  color: white;
+  
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -12,6 +16,6 @@
   line-height: 120px;
   
   &:hover {
-    background-color: #ddd;
+    background-color: lighten($color, 20%);
   }
 }

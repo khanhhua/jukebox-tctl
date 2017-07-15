@@ -9,31 +9,18 @@ For example:
 @import './variables/colors';
 @import './variables/components';
 @import './themes/default';
+
+https://color.adobe.com/Aspirin-C-color-theme-251864/?showPublished=true
 */
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/forms";
 @import "~bootstrap/scss/type";
 
-@import "~susy";
-
-$susy: (
-  'columns': susy-repeat(4),
-  'gutters': 0.25,
-  'spread': 'narrow',
-  'container': '1200px',
-  'container-spread': 'narrow',
-);
-
-$of-columns: of 6;
+@import './mixins';
 
 .container {
-  width: span(4);
-  margin: 0 auto;
+  @include clearfix;
   
-  &:before, &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+  margin: 0 auto;
 }

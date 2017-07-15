@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux'
 import locationReducer from './location'
 
+import playbackReducer from '../routes/Home/modules/playback';
+
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     location: locationReducer,
+    playback: playbackReducer,
     ...asyncReducers
   })
 }

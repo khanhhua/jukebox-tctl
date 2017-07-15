@@ -1,4 +1,7 @@
 @import "~susy";
+@import "../../../styles/mixins";
+
+@import '../../../styles/susy-config';
 
 .homeview {
   width: span(4);
@@ -11,20 +14,35 @@
 }
 
 .searchbox {
+  $bg-color: #1695A3;
+  
   width: span(4);
   padding: 1em gutter()/2;
+  
+  background-color: $bg-color;
 }
 
 .playlist {
   float: left;
-  width: span(1);  
-  padding: 0 gutter() / 2;
+  width: span(1);
   
   border-right: 1px solid rgba(170, 170, 170, 0.5);
 }
 
 .playlist__item {
-  border-bottom: 1px solid rgba(170, 170, 170, 0.5);
+  $color: #225378;
+  $bg-color: #ACF0F2;
+  
+  @include interactive;
+  
+  padding: 1em gutter(1)/2;
+  
+  color: $color;
+  background-color: $bg-color;
+  
+  &:hover {
+    background-color: lighten($bg-color, 10%);
+  }
   
   &:last-child {
     border-bottom: none;
@@ -39,25 +57,43 @@
 .central-stage {
   float: left;
   width: span(2);
-  padding: 0 gutter() / 2;
+  padding: 1em gutter() / 2;
 }
 
 .lyricbox {
   float: left;
   width: span(1);
-  padding: 0 gutter() / 2;
+  padding: 1em gutter(1 of 4)/2;
+  
+  p:first-child {
+    margin-top: 0;
+  }
 }
 
 .albums {
+  $color: #1695A3;
+  
   width: span(4);
   float: left;
   clear: both;
   
-  border-top: 1px solid rgba(170, 170, 170, 0.5);
+  background: $color;
 }
 
 .albums__item {
+  $bg-color: #1695A3;
+  
+  @include interactive;
+  
   float: left;
   width: span(1);
   padding: 1.5em gutter() / 2;
+  // @include gallery(1 of 4);
+  
+  background: $bg-color;
+  color: white;
+
+  &:hover {
+    background: lighten($bg-color, 10%);
+  }
 }

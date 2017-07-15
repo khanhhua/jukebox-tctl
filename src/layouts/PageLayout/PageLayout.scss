@@ -1,7 +1,14 @@
 @import '~susy';
+@import "~susy/sass/plugins/svg-grid";
+
+@import '../../styles/susy-config';
+
+$bg-color: #ACF0F2;
 
 .page-layout__viewport {
   width: span(4);
+  // background: susy-svg-grid() no-repeat scroll;
+  background-color: $bg-color;
 
   &:before, &:after {
     display: table;

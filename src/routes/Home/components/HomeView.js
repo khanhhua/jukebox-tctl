@@ -1,28 +1,22 @@
-import React from 'react'
+import React from 'react';
+import { connect } from 'react-redux';
 // We can `import` image as well
 import './HomeView.scss';
 
 import PlayButton from './PlayButton';
 
-export const HomeView = () => (
+const HomeView = ({playlist, albums}) => (
   <div className="homeview">
     <div className="searchbox">
       <input className="form-control searchbox__query" placeholder="Search" />
     </div>
     
     <div className="playlist">
-      <div className="playlist__item">
-        <h4 className="title">Praise the LORD</h4>
+      {playlist.map(({id, title}) => 
+      <div className="playlist__item" key={id}>
+        <h4 className="title">{title}</h4>
       </div>
-      <div className="playlist__item">
-        <h4 className="title">Praise the LORD</h4>
-      </div>
-      <div className="playlist__item">
-        <h4 className="title">Praise the LORD</h4>
-      </div>
-      <div className="playlist__item">
-        <h4 className="title">Praise the LORD</h4>
-      </div>
+      )}
     </div>
     
     <div className="central-stage">
@@ -49,32 +43,29 @@ export const HomeView = () => (
     </div>
     
     <div className="albums">
+      {/* PREV BUTTON */}
+      {albums.slice(0,7).map(({id, title}) => (
+      <div className="albums__item" key={id}>
+        {title}
+      </div>  
+      ))}
       <div className="albums__item">
-        Traditional Hymns
+        ...
       </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
-      <div className="albums__item">
-        Traditional Hymns
-      </div>
+      {/* NEXT BUTTON */}
     </div>
   </div>
 )
 
-export default HomeView
+const mapDispatchToProps = {
+  // increment : () => increment(1),
+  // doubleAsync
+}
+
+const mapStateToProps = (state) => {
+  const {playlist, albums} = state.playback;
+  
+  return {playlist, albums};
+};
+
+export default connect(mapStateToProps)(HomeView);
