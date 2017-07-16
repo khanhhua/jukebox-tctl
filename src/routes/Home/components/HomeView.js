@@ -15,9 +15,9 @@ const HomeView = ({current, playlist, albums, actions}) => (
     </div>
     
     <div className="playlist">
-      {playlist.map(({id, title, mediaLink}) => 
+      {playlist.map(({id, title, mediaLink, lyric}) => 
       <div className={'playlist__item' + (current.id===id?' active':'')}
-           onClick={() => actions.play({id, title, mediaLink})}
+           onClick={() => actions.play({id, title, mediaLink, lyric})}
            key={id}>
         <h4 className="title">{title}</h4>
       </div>
@@ -28,21 +28,11 @@ const HomeView = ({current, playlist, albums, actions}) => (
       <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
     </div>
     
+    {current.lyric &&
     <div className="lyricbox">
-      <p>
-        Risus explicabo cupiditate nunc tenetur qui asperiores amet penatibus
-        repellendus labore quis
-      </p>
-      <p>
-        Ea amet ornare congue, cupiditate parturient? Accusantium. Inceptos 
-        temporibus reprehenderit sapien facilis, autem saepe! Nostra quam esse
-        fugiat! Qui tincidunt vitae ante cupiditate laboris,
-      </p>
-      <p>
-        eos! Dignissim aliquam porta sagittis corrupti, tortor ducimus nihil
-        velit vehicula tellus? Laoreet ridiculus. Per luctus, libero viverra ultrices aute
-      </p>
+      {current.lyric}
     </div>
+    }
     
     <div className="albums">
       {/* PREV BUTTON */}

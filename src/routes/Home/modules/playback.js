@@ -80,7 +80,7 @@ export const actions = {
         return;
       }
 
-      const defaultAlbum = data.find(item => item.id === 'album-tvchh');
+      const defaultAlbum = data.find(item => item.id === 'album-tctlvn');
       if (!(defaultAlbum && defaultAlbum.songs && defaultAlbum.songs.length)) {
         return;
       }

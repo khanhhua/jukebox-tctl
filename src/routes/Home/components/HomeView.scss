@@ -71,6 +71,13 @@
   width: span(1);
   padding: 1em gutter(1 of 4)/2;
   
+  white-space: pre-wrap;
+  
+  height: calc(100vh - 9rem);
+  overflow-y: scroll;
+  
+  background-color: rgba(255, 255, 255, 0.5);
+  
   p:first-child {
     margin-top: 0;
   }
@@ -98,10 +105,13 @@
   float: left;
   width: span(1);
   padding: 1.5em gutter() / 2;
-  // @include gallery(1 of 4);
   
   background-color: $bg-color;
   color: white;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     background-color: lighten($bg-color, 10%);
