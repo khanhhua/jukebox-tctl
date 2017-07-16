@@ -46,8 +46,10 @@ const HomeView = ({current, playlist, albums, actions}) => (
     
     <div className="albums">
       {/* PREV BUTTON */}
-      {albums.slice(0,7).map(({id, title}) => (
-      <div className="albums__item" key={id}>
+      {albums.slice(0,7).map(({id, title, selected}) => (
+      <div className={'albums__item ' + (selected?'active':'')}
+           onClick={() => actions.selectAlbum(id)}
+           key={id}>
         {title}
       </div>  
       ))}

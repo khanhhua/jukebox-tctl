@@ -11,6 +11,7 @@ export const PLAYBACK_STATUS_PAUSED = 'PAUSED';
 const ACTION_LOAD_PLAYLIST = 'ACTION_LOAD_PLAYLIST';
 const ACTION_LOAD_ALBUMS = 'ACTION_LOAD_ALBUMS';
 
+const ACTION_SELECT_ALBUM = 'ACTION_SELECT_ALBUM';
 const ACTION_SELECT_SONG = 'ACTION_SELECT_SONG';
 
 const ACTION_REQUEST_PLAY_SONG = 'ACTION_REQUEST_PLAY_SONG';
@@ -70,13 +71,12 @@ export const actions = {
     
     const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
     db.getAlbums().then(data => {
-      dispatch({
-        type: ACTION_LOAD_ALBUMS,
-        status: STATUS_SUCCESS,
-        payload: data
-      });
-      
       if (!(data.length)) {
+        dispatch({
+          type: ACTION_LOAD_ALBUMS,
+          status: STATUS_ERROR,
+          payload: 'No albums available'
+        });
         return;
       }
 
@@ -84,6 +84,13 @@ export const actions = {
       if (!(defaultAlbum && defaultAlbum.songs && defaultAlbum.songs.length)) {
         return;
       }
+
+      defaultAlbum.selected = true;
+      dispatch({
+        type: ACTION_LOAD_ALBUMS,
+        status: STATUS_SUCCESS,
+        payload: data
+      });
 
       db.getSongsByIds(defaultAlbum.songs).then(songs => {
         dispatch({
@@ -94,7 +101,32 @@ export const actions = {
       });
     })
   },
-  
+  selectAlbum: (albumId) => (dispatch, getState) => {
+    dispatch({
+      type: ACTION_SELECT_ALBUM,
+      payload: albumId
+    });
+    
+    const {playback: {albums}} = getState();
+    const defaultAlbum = albums.find(item => item.selected);
+    
+    db.getSongsByIds(defaultAlbum.songs).then(songs => {
+      dispatch({
+        type: ACTION_LOAD_PLAYLIST,
+        status: STATUS_SUCCESS,
+        payload: songs
+      });
+      
+      dispatch({
+        type: ACTION_SELECT_SONG,
+        payload: 'DEFAULT'
+      });
+      
+      let {playback: {current: song}} = getState();
+
+      ensureAudioElement(dispatch, song);
+    });
+  },
   selectFirstSong: () => (dispatch, getState) => {
     dispatch({
       type: ACTION_SELECT_SONG,
@@ -149,7 +181,22 @@ export default function playbackReducer (state = initialState, action) {
         albums: action.payload
       });
       return newState;
+    
+    case ACTION_SELECT_ALBUM: 
+      const prevSelectedAlbumIndex = state.albums.findIndex(item => item.selected);
+      const albumIndex = state.albums.findIndex(item => item.id === action.payload);
+      const albums = Object.assign([], state.albums);
       
+      albums[albumIndex] = Object.assign({}, albums[albumIndex], { selected: true });
+      if (prevSelectedAlbumIndex !== -1) {
+        albums[prevSelectedAlbumIndex] = Object.assign({}, albums[prevSelectedAlbumIndex], { selected: false });
+      }     
+      
+      newState = Object.assign({}, state, {
+        albums: albums
+      });
+      return newState;
+    
     case ACTION_LOAD_PLAYLIST:
       if (action.status !== STATUS_SUCCESS) {
         return state;

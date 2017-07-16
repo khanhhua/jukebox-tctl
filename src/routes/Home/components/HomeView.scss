@@ -25,8 +25,11 @@
 .playlist {
   float: left;
   width: span(1);
+  height: calc(100vh - 9rem);
   
   border-right: 1px solid rgba(170, 170, 170, 0.5);
+  
+  overflow-y: scroll;
 }
 
 .playlist__item {
@@ -84,7 +87,7 @@
   width: span(4);
   
   float: left;
-  background: $color;
+  background-color: $color;
 }
 
 .albums__item {
@@ -97,14 +100,18 @@
   padding: 1.5em gutter() / 2;
   // @include gallery(1 of 4);
   
-  background: $bg-color;
+  background-color: $bg-color;
   color: white;
 
   &:hover {
-    background: lighten($bg-color, 10%);
+    background-color: lighten($bg-color, 10%);
   }
   
   &:nth-child(4n + 1) {
     clear: left;
+  }
+  
+  &.active {
+    background-color: lighten($bg-color, 20%);
   }
 }
