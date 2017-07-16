@@ -13,7 +13,14 @@ export default ({query='', songs=[], actions}) => (
     <div className="searchbox__dropdown">
       <div className="list-group">
         {songs.map(item =>
-        <a href="#" className="list-group-item" key={item.id}>{item.title}</a>
+        <div className="list-group-item" key={item.id}>
+          {item.title}
+          &nbsp;
+          <a className="btn btn-link add" href="#"
+              onClick={() => actions.addSongToCustomPlaylist(item.id)}>
+              <i className="fa fa-plus"></i>
+          </a>
+        </div>
         )}
       </div>
     </div>

@@ -14,9 +14,12 @@ https://color.adobe.com/Aspirin-C-color-theme-251864/?showPublished=true
 */
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/normalize";
 @import "~bootstrap/scss/forms";
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/type";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/buttons";
 
 @import './mixins';
 

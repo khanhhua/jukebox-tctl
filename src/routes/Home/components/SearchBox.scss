@@ -19,6 +19,9 @@
 }
 
 .searchbox__dropdown {
+  $bg-color: #1695A3;
+  $color: #1695A3;
+
   position: relative;
 
   & > .list-group {
@@ -30,5 +33,34 @@
     border-radius: 0;
     border-left: none;
     border-right: none;
+  }
+
+  & > .list-group .list-group-item .btn.btn-link {
+    width: 2.3em;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 50%;
+    margin-left: auto;
+
+    background-color: $bg-color;
+    color: white;
+
+    transition: none;
+  }
+  & > .list-group .list-group-item:hover {
+    .fa {
+      display: none;
+    }
+
+    .btn.btn-link.add {
+      width: auto;
+
+      color: $color;
+      background-color: transparent;
+    }
+
+    .btn.btn-link.add:after {
+      content: "Add to playlist";
+    }
   }
 }

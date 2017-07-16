@@ -43,8 +43,9 @@ const HomeView = ({current, playlist, albums, search, actions}) => (
         {title}
       </div>
       ))}
-      <div className="albums__item">
-        ...
+      <div className="albums__item"
+           onClick={() => actions.selectAlbum('CUSTOM_PLAYLIST')}>
+        My Playlist
       </div>
       {/* NEXT BUTTON */}
     </div>
