@@ -39,7 +39,7 @@ function dbPOST(url, data, transformer=null) {
 export function getAlbums () {
   const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
 
-  return dbGET(url, (data) => data.map(item => (item.value.id=item.value._id, item.value) ));
+  return dbGET(url, (data) => data.map(({value:item}) => (item.id=item._id, item) ));
 }
 
 export function getSongsByIds (ids=[]) {
@@ -47,3 +47,11 @@ export function getSongsByIds (ids=[]) {
 
   return dbPOST(url, {keys: ids}, (data) => data.map(({value:item}) => (item.id=item._id, item) ));
 }
+
+export function findSongByTitle (title) {
+  const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/song/_search/song_title_lyric`;
+
+  return dbPOST(url, {q: `title:${title}`}, (data) => data.map(({id, fields:{title}}) => ({id, title}) ));
+}
+
+window.findSongByTitle = findSongByTitle;
