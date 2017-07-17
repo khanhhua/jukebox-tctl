@@ -10,9 +10,12 @@ import {actions as searchActions} from '../modules/search';
 import PlayButton from './PlayButton';
 import SearchBox from './SearchBox';
 
-const HomeView = ({current, playlist, albums, search, actions}) => (
+const HomeView = ({current, playlist, customPlaylist, albums, search, actions, ui}) => (
   <div className="homeview">
-    <SearchBox query={search.query} songs={search.songs} actions={actions}/>
+    <SearchBox query={search.query}
+               songs={search.songs}
+               customPlaylist={customPlaylist}
+               actions={actions} ui={ui} />
 
     <div className="playlist">
       {playlist.map(({id, title, mediaLink, lyric}) =>
@@ -57,10 +60,11 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const {current, playlist, albums} = state.playback;
+  const {current, playlist, customPlaylist, albums} = state.playback;
   const search = state.search;
+  const ui = state.homeUi;
 
-  return {current, playlist, albums, search};
+  return {current, playlist, customPlaylist, albums, search, ui};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeView);

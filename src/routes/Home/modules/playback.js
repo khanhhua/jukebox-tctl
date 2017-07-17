@@ -260,6 +260,7 @@ export default function playbackReducer (state = initialState, action) {
         customPlaylist: Object.assign([], customPlaylist.concat(action.payload))
       });
       return newState;
+
     default:
       break;
   }

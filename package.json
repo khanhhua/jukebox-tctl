@@ -1,7 +1,7 @@
 {
   "name": "jukebox-tctl",
   "version": "0.1.3",
-  "description": "Get started with React, Redux, and React-Router!",
+  "description": "Hymnal Jukebox for Vietnamese",
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"
   },
-  "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
+  "author": "Khanh Hua <giakhanh2487@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha",
