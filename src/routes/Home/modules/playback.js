@@ -8,6 +8,8 @@ export const PLAYBACK_STATUS_LOADED = 'LOADED';
 export const PLAYBACK_STATUS_PLAYING = 'PLAYING';
 export const PLAYBACK_STATUS_PAUSED = 'PAUSED';
 
+const ACTION_SET_PLAYBACK_OPTIONS = 'ACTION_SET_PLAYBACK_OPTIONS';
+
 const ACTION_LOAD_PLAYLIST = 'ACTION_LOAD_PLAYLIST';
 const ACTION_LOAD_ALBUMS = 'ACTION_LOAD_ALBUMS';
 const ACTION_ADD_TO_PLAYLIST = 'ACTION_ADD_TO_PLAYLIST';
@@ -28,7 +30,7 @@ const STATUS_ERROR = 'ERROR';
 // Actions
 // ------------------------------------
 
-function ensureAudioElement (dispatch, song) {
+function ensureAudioElement (dispatch, getState, song) {
   let audioElement;
   if (window.audioPlayer) {
     audioElement = window.audioPlayer;
@@ -66,9 +68,43 @@ function ensureAudioElement (dispatch, song) {
       payload: song
     });
   };
+  
+  audioElement.onended = function () {
+    const {playback: 
+      {
+        current,
+        playlist,
+        options: {autoPlayNext}
+      }
+    } = getState();
+    
+    if (autoPlayNext) {
+      const currentIndex = playlist.findIndex(item => item.id === current.id);
+      
+      if (currentIndex === playlist.length - 1) {
+        console.info('Playlist is finished');
+      } else {
+        const song = playlist[currentIndex + 1];
+        console.info('Playing next song in the list...');
+        
+        dispatch({
+          type: ACTION_REQUEST_PLAY_SONG,
+          payload: song
+        });
+        
+        ensureAudioElement(dispatch, getState, song);
+      }
+    }
+  }
 }
 
 export const actions = {
+  setPlaybackOption: (optionKey, value) => ({
+    type: ACTION_SET_PLAYBACK_OPTIONS,
+    payload: {
+      [optionKey]: value
+    }
+  }),
   loadAlbums: () => (dispatch, getState) => {
     dispatch({
       type: ACTION_LOAD_PLAYLIST,
@@ -128,7 +164,7 @@ export const actions = {
 
         let {playback: {current: song}} = getState();
 
-        ensureAudioElement(dispatch, song);
+        ensureAudioElement(dispatch, getState, song);
       });
     } else {
       const {playback: {albums}} = getState();
@@ -148,7 +184,7 @@ export const actions = {
 
         let {playback: {current: song}} = getState();
 
-        ensureAudioElement(dispatch, song);
+        ensureAudioElement(dispatch, getState, song);
       });
     }
   },
@@ -161,7 +197,7 @@ export const actions = {
     setTimeout(() => {
       let {playback: {current: song}} = getState();
 
-      ensureAudioElement(dispatch, song);
+      ensureAudioElement(dispatch, getState, song);
     }, 300);
   },
   play: (song) => (dispatch) => {
@@ -170,7 +206,7 @@ export const actions = {
       payload: song
     });
 
-    ensureAudioElement(dispatch, song);
+    ensureAudioElement(dispatch, getState, song);
   },
   pause: () => {
     if (window.audioPlayer) {
@@ -193,7 +229,10 @@ const initialState = {
   },
   playlist: [],
   albums: [],
-  customPlaylist: []
+  customPlaylist: [],
+  options: {
+    autoPlayNext: true
+  }
 };
 
 export default function playbackReducer (state = initialState, action) {
@@ -202,6 +241,13 @@ export default function playbackReducer (state = initialState, action) {
   switch (action.type) {
     case '@@redux/init':
       return state;
+      
+    case ACTION_SET_PLAYBACK_OPTIONS:
+      newState = Object.assign({}, state, {
+        options: Object.assign({}, state.options, action.payload)
+      });
+    
+      return newState;
     case ACTION_LOAD_ALBUMS:
       if (action.status !== STATUS_SUCCESS) {
         return state;
