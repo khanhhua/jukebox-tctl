@@ -5,7 +5,7 @@
 
 .homeview {
   width: span(4);
-  
+
   &:before, &:after {
     display: table;
     content: "";
@@ -13,47 +13,38 @@
   }
 }
 
-.searchbox {
-  $bg-color: #1695A3;
-  
-  width: span(4);
-  padding: 1em gutter()/2;
-  
-  background-color: $bg-color;
-}
-
 .playlist {
   float: left;
   width: span(1);
   height: calc(100vh - 9rem);
-  
+
   border-right: 1px solid rgba(170, 170, 170, 0.5);
-  
+
   overflow-y: scroll;
 }
 
 .playlist__item {
   $color: #225378;
   $bg-color: #ACF0F2;
-  
+
   @include interactive;
-  
+
   padding: 1em gutter(1)/2;
-  
+
   color: $color;
   background-color: $bg-color;
-  
+
   &.active {
     background-color: lighten($bg-color, 5%);
   }
   &:hover {
     background-color: lighten($bg-color, 10%);
   }
-  
+
   &:last-child {
     border-bottom: none;
   }
-  
+
   .title {
     padding: 0;
     margin: 0.5em 0;
@@ -70,14 +61,14 @@
   float: left;
   width: span(1);
   padding: 1em gutter(1 of 4)/2;
-  
+
   white-space: pre-wrap;
-  
+
   height: calc(100vh - 9rem);
   overflow-y: scroll;
-  
+
   background-color: rgba(255, 255, 255, 0.5);
-  
+
   p:first-child {
     margin-top: 0;
   }
@@ -85,30 +76,30 @@
 
 .albums {
   $color: #1695A3;
-  
+
   @include clearfix;
-  
+
   position: fixed;
   bottom: 0;
   left: 0;
   width: span(4);
-  
+
   float: left;
   background-color: $color;
 }
 
 .albums__item {
   $bg-color: #1695A3;
-  
+
   @include interactive;
-  
+
   float: left;
   width: span(1);
   padding: 1.5em gutter() / 2;
-  
+
   background-color: $bg-color;
   color: white;
-  
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -116,11 +107,11 @@
   &:hover {
     background-color: lighten($bg-color, 10%);
   }
-  
+
   &:nth-child(4n + 1) {
     clear: left;
   }
-  
+
   &.active {
     background-color: lighten($bg-color, 20%);
   }

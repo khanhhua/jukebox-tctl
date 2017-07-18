@@ -1,0 +1,85 @@
+@import "~susy";
+@import "../../../styles/mixins";
+
+@import '../../../styles/susy-config';
+
+
+.searchbox {
+  $bg-color: #1695A3;
+
+  position: relative;
+  z-index: 1000;
+
+  width: span(4);
+  padding: 1em gutter()/2;
+
+  background-color: $bg-color;
+
+  .form-control {
+    border: none;
+    border-radius: 0;
+
+    position: relative;
+    z-index: 1100;
+  }
+}
+
+.searchbox__overlay {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.searchbox__dropdown {
+  $bg-color: #1695A3;
+  $color: #1695A3;
+
+  position: relative;
+  z-index: 1100;
+
+  & > .list-group {
+    position: absolute;
+    width: 100%;
+  }
+
+  & > .list-group .list-group-item {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  & > .list-group .list-group-item .btn.btn-link {
+    margin-left: auto;
+  }
+  & > .list-group .list-group-item .btn.btn-link.add {
+    width: 2.3em;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 50%;
+
+    background-color: $bg-color;
+    color: white;
+
+    transition: none;
+  }
+  & > .list-group .list-group-item:hover {
+    .fa {
+      display: none;
+    }
+
+    .btn.btn-link.add {
+      width: auto;
+
+      color: $color;
+      background-color: transparent;
+    }
+
+    .btn.btn-link.add:after {
+      content: "Add to playlist";
+    }
+  }
+}
