@@ -33,8 +33,13 @@ function ensureAudioElement (dispatch, song) {
   if (window.audioPlayer) {
     audioElement = window.audioPlayer;
 
-    if (audioElement.paused) {
-      audioElement.play();
+    if (audioElement.currentSrc === song.mediaLink) {
+      if (audioElement.paused) {
+        audioElement.play();
+      } else {
+        audioElement.setAttribute('autoplay', true);
+        audioElement.setAttribute('src', song.mediaLink);
+      }
     } else {
       audioElement.setAttribute('autoplay', true);
       audioElement.setAttribute('src', song.mediaLink);
@@ -70,7 +75,6 @@ export const actions = {
       status: STATUS_PENDING
     });
 
-    const url = `https://fatmandesigner-blog.cloudant.com/hymnals/_design/album/_view/public-albums?limit=10&reduce=false`;
     db.getAlbums().then(data => {
       if (!(data.length)) {
         dispatch({
