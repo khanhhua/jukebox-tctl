@@ -200,7 +200,7 @@ export const actions = {
       ensureAudioElement(dispatch, getState, song);
     }, 300);
   },
-  play: (song) => (dispatch) => {
+  play: (song) => (dispatch, getState) => {
     dispatch({
       type: ACTION_REQUEST_PLAY_SONG,
       payload: song
