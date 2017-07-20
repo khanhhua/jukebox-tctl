@@ -1,0 +1,10 @@
+{
+  "name": "Jukebox - Thánh Ca Tin Lành",
+  "lang": "vi-VN",
+  ​​"orientation": "landscape-primary",
+  "short_name": "Jukebox",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Tiện ích nghe nhạc thánh ca tin lành ngay trên trình duyệt của bạn."
+}
