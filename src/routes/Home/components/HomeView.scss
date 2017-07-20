@@ -4,21 +4,56 @@
 @import '../../../styles/susy-config';
 
 .homeview {
-  width: span(4);
+  @include clearfix;
 
-  &:before, &:after {
-    display: table;
-    content: "";
-    clear: both;
+  @media (min-width: 768px) {
+    width: span(4);
   }
 }
 
 .playlist {
+  position: relative;
+
   float: left;
-  width: span(1);
-  height: calc(100vh - 9rem);
+  width: span(1 of 1);
+  height: calc(40vh);
 
   border-right: 1px solid rgba(170, 170, 170, 0.5);
+
+  overflow-y: scroll;
+
+  font-size: 10px;
+
+  &:before {
+    position: absolute;
+
+    content: "";
+    height: 5px;
+    width: 100%;
+    bottom: 0;
+    z-index: 1;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,999999+100&0+0,0.65+100 */
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(153,153,153,0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(153,153,153,0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(153,153,153,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6999999',GradientType=0 ); /* IE6-9 */
+  }
+
+  @media (min-width: 768px) {
+    width: span(1);
+    height: calc(100vh - 9rem);
+
+    &:before {
+      background: none;
+    }
+  }
+}
+
+.playlist__scrollpane {
+  float: left;
+  width: span(1 of 1);
+  height: 100%;
 
   overflow-y: scroll;
 }
@@ -34,6 +69,8 @@
   color: $color;
   background-color: $bg-color;
 
+  font-size: inherit;
+
   &.active {
     background-color: lighten($bg-color, 5%);
   }
@@ -48,13 +85,19 @@
   .title {
     padding: 0;
     margin: 0.5em 0;
+
+    font-size: 2em;
   }
 }
 
 .central-stage {
   float: left;
-  width: span(2);
+  width: 100%;
   padding: 1em gutter() / 2;
+
+  @media (min-width: 768px) {
+    width: span(2);
+  }
 }
 
 .lyricbox {
@@ -94,8 +137,8 @@
   @include interactive;
 
   float: left;
-  width: span(1);
-  padding: 1.5em gutter() / 2;
+  width: span(1 of 2);
+  padding: 1.5em gutter(1 of 2) / 4;
 
   background-color: $bg-color;
   color: white;
@@ -115,48 +158,56 @@
   &.active {
     background-color: lighten($bg-color, 20%);
   }
+
+  @media (min-width: 768px) {
+    width: span(1);
+
+    padding: 1.5em gutter(1) / 2;
+  }
 }
 
 
 .switch-button {
   $color: #225378;
   $bg-color: #1695A3;
-  
+
   & > input[type="checkbox"] {
     display: none;
   }
-  
+
   input[type="checkbox"] + label {
     position: relative;
     display: inline-block;
     padding-left: 4.5em;
-    
+
     line-height: 2em;
-    
+
     color: $color;
-    
-    cursor: pointer;    
+
+    cursor: pointer;
+
+    white-space: nowrap;
   }
-  
+
   input[type="checkbox"] + label:after {
     display: block;
     content: "";
-    
+
     position: absolute;
     left: 0.05em;
     top: 0.05em;
     width: 1.9em;
     height: 1.9em;
-    
+
     background-color: white;
-    
+
     transition: left 150ms ease-in;
   }
-  
+
   input[type="checkbox"]:checked + label:after {
     left: 2.05em;
   }
-  
+
   input[type="checkbox"] + label:before {
     content: "";
     display: block;
@@ -165,12 +216,12 @@
     top: 0;
     width: 4em;
     height: 2em;
-    
+
     background-color: darken($bg-color, 5%);
-    
+
     transition: background-color 300ms ease-out;
   }
-  
+
   input[type="checkbox"] + label:hover:before {
     background-color: lighten($bg-color, 10%);
   }

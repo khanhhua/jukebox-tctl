@@ -18,13 +18,15 @@ const HomeView = ({current, playlist, customPlaylist, albums, search, options, a
                actions={actions} ui={ui} />
 
     <div className="playlist">
-      {playlist.map(({id, title, mediaLink, lyric}) =>
-      <div className={'playlist__item' + (current.id===id?' active':'')}
-           onClick={() => actions.play({id, title, mediaLink, lyric})}
-           key={id}>
-        <h4 className="title">{title}</h4>
+      <div className="playlist__scrollpane">
+        {playlist.map(({id, title, mediaLink, lyric}) =>
+        <div className={'playlist__item' + (current.id===id?' active':'')}
+             onClick={() => actions.play({id, title, mediaLink, lyric})}
+             key={id}>
+          <h4 className="title">{title}</h4>
+        </div>
+        )}
       </div>
-      )}
     </div>
 
     <div className="central-stage">
@@ -33,7 +35,7 @@ const HomeView = ({current, playlist, customPlaylist, albums, search, options, a
                onChange={(e) => actions.setPlaybackOption('autoPlayNext', !options.autoPlayNext) } />
         <label htmlFor="autoPlayNext" className="control-label">Auto play next</label>
       </span>
-      
+
       <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
     </div>
 
