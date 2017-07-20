@@ -1,6 +1,6 @@
 {
   "name": "jukebox-tctl",
-  "version": "0.1.7",
+  "version": "0.1.7.1",
   "description": "Hymnal Jukebox for Vietnamese",
   "main": "index.js",
   "scripts": {
