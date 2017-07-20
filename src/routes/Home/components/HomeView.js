@@ -10,7 +10,7 @@ import {actions as searchActions} from '../modules/search';
 import PlayButton from './PlayButton';
 import SearchBox from './SearchBox';
 
-const HomeView = ({current, playlist, customPlaylist, albums, search, actions, ui}) => (
+const HomeView = ({current, playlist, customPlaylist, albums, search, options, actions, ui}) => (
   <div className="homeview">
     <SearchBox query={search.query}
                songs={search.songs}
@@ -28,6 +28,12 @@ const HomeView = ({current, playlist, customPlaylist, albums, search, actions, u
     </div>
 
     <div className="central-stage">
+      <span className="switch-button">
+        <input id="autoPlayNext" type="checkbox" checked={options.autoPlayNext}
+               onChange={(e) => actions.setPlaybackOption('autoPlayNext', !options.autoPlayNext) } />
+        <label htmlFor="autoPlayNext" className="control-label">Auto play next</label>
+      </span>
+      
       <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
     </div>
 
@@ -60,11 +66,11 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const {current, playlist, customPlaylist, albums} = state.playback;
+  const {current, playlist, customPlaylist, albums, options} = state.playback;
   const search = state.search;
   const ui = state.homeUi;
 
-  return {current, playlist, customPlaylist, albums, search, ui};
+  return {current, playlist, customPlaylist, albums, options, search, ui};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeView);

@@ -1,6 +1,6 @@
 {
   "name": "jukebox-tctl",
-  "version": "0.1.6",
+  "version": "0.1.7-1",
   "description": "Hymnal Jukebox for Vietnamese",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"
+    "url": "git+https://github.com/khanhhua/jukebox-tctl.git"
   },
   "author": "Khanh Hua <giakhanh2487@gmail.com>",
   "license": "MIT",
