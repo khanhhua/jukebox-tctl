@@ -1,5 +1,5 @@
 import React from 'react';
-import './PlayButton.scss';
+import './Player.scss';
 
 import {
   PLAYBACK_STATUS_UNLOADED,
@@ -20,8 +20,8 @@ function onClick({selectFirstSong, play, pause}, song) {
 }
 
 const PlayButton = ({style, song, actions}) => (
-  <div>
-    <div className="play-button" style={style} onClick={onClick.bind(this, actions, song)}>
+  <div className="player" style={style}>
+    <div className="play-button" onClick={onClick.bind(this, actions, song)}>
       {(song && song.status !== 'PLAYING') &&
       <span>PLAY</span>
       }

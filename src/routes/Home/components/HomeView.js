@@ -7,7 +7,7 @@ import './HomeView.scss';
 import {actions} from '../modules/playback';
 import {actions as searchActions} from '../modules/search';
 
-import PlayButton from './PlayButton';
+import Player from './Player';
 import SearchBox from './SearchBox';
 
 const HomeView = ({current, playlist, customPlaylist, albums, search, options, actions, ui}) => (
@@ -36,7 +36,7 @@ const HomeView = ({current, playlist, customPlaylist, albums, search, options, a
         <label htmlFor="autoPlayNext" className="control-label">Auto play next</label>
       </span>
 
-      <PlayButton style={{margin:'0 auto'}} song={current} actions={actions} />
+      <Player style={{margin:'0 auto'}} song={current} actions={actions} />
     </div>
 
     {current.lyric &&

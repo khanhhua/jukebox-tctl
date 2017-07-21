@@ -1,0 +1,54 @@
+@import "../../../styles/mixins";
+
+$color: #EB7F00;
+
+.player {
+  width: 100%;
+  
+  display: flex;
+  justify-content: center;
+  
+  @media (min-width: 768px) {
+    display: block;
+  }
+}
+
+.play-button {
+  @include interactive;
+  
+  background-color: $color;
+  color: white;
+  
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  
+  flex: 0 0 120px;
+  margin: 1em 1em 1em 0;
+  
+  text-align: center;
+  line-height: 120px;
+  
+  &:hover {
+    background-color: lighten($color, 20%);
+  }
+  
+  @media (min-width: 768px) {
+    float: none;
+    margin: 1em auto;
+    
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+  }
+}
+
+.song-summary {
+  margin-top: 1em;
+  
+  h3 {
+    margin-top: 0;
+  }
+}
